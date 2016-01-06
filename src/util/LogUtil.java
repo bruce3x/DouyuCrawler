@@ -129,6 +129,10 @@ public class LogUtil {
         int lastIndex = result.lastIndexOf(".");
         result = result.substring(lastIndex + 1, result.length());
         int line = thisMethodStack.getLineNumber();
+
+        if (result.contains("$"))
+            result = result.substring(0, result.indexOf("$"));
+
         return result + ":" + line;
     }
 

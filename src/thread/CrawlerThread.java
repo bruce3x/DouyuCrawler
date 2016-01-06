@@ -10,6 +10,7 @@ import model.ServerInfo;
 import util.LogUtil;
 import util.MD5Util;
 import util.SttCode;
+import util.TimeHelper;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -32,8 +33,7 @@ public class CrawlerThread implements Runnable {
 
     private MessageHandler.OnReceiveListener loginListener = new MessageHandler.OnReceiveListener() {
         private boolean finish = false;
-        private long start = System.currentTimeMillis();
-        private final int TIME_OUT = 10 * 1000;
+        private TimeHelper helper = new TimeHelper(10 * 1000);//10秒等待超时
 
         @Override
         public void onReceive(List<String> responses) {
@@ -62,8 +62,7 @@ public class CrawlerThread implements Runnable {
             long now = System.currentTimeMillis();
 
             //获取到弹幕服务器地址和gid 或者超时之后，结束此次监听
-
-            finish = f1 && f2 || (now - start) > TIME_OUT;
+            finish = f1 && f2 || helper.checkTimeout();
         }
 
         @Override
@@ -74,7 +73,9 @@ public class CrawlerThread implements Runnable {
 
     private MessageHandler.OnReceiveListener barrageListener = new MessageHandler.OnReceiveListener() {
 
+        private boolean finished = false;
         private List<Barrage> barrages = new ArrayList<>();
+        private TimeHelper helper = new TimeHelper(20 * 60 * 1000);//间隔20min检测一次直播状态
 
         @Override
         public void onReceive(List<String> responses) {
@@ -96,11 +97,15 @@ public class CrawlerThread implements Runnable {
                     barrages.clear();
                 }
             }
+
+            //检测不在直播， 结束抓取
+            if (helper.checkTimeout() && !isOnline()) finished = true;
+
         }
 
         @Override
         public boolean isFinished() {
-            return false;
+            return finished;
         }
     };
 
@@ -114,14 +119,14 @@ public class CrawlerThread implements Runnable {
     public void run() {
         //获取房间页面
         LogUtil.i("获取房间页面 ...");
-        String s = HttpHandler.get(roomUrl);
+        String pageHtml = HttpHandler.get(roomUrl);
 
         //获取roomId
         LogUtil.i("获取直播房间ID ...");
-        rid = ResponseParser.parseRoomId(s);
+        rid = ResponseParser.parseRoomId(pageHtml);
 
         //检查是否在线
-        boolean online = ResponseParser.parseOnline(s);
+        boolean online = ResponseParser.parseOnline(pageHtml);
         if (!online) {
             LogUtil.w("该房间还没有直播！" + roomUrl);
             return;
@@ -129,7 +134,7 @@ public class CrawlerThread implements Runnable {
 
         //获取服务器IP列表
         LogUtil.i("获取服务器列表 ...");
-        List<ServerInfo> serverList = ResponseParser.parseServerInfo(s);
+        List<ServerInfo> serverList = ResponseParser.parseServerInfo(pageHtml);
 
         if (serverList == null || serverList.size() <= 0) {
             LogUtil.w("获取服务器列表失败！");
@@ -217,6 +222,14 @@ public class CrawlerThread implements Runnable {
                     LogUtil.w("连接关闭异常！");
                 }
         }
+    }
+
+    /**
+     * 判断当前房间是否在直播
+     */
+    private boolean isOnline() {
+        String pageHtml = HttpHandler.get(roomUrl);
+        return pageHtml != null && ResponseParser.parseOnline(pageHtml);
     }
 
 }
