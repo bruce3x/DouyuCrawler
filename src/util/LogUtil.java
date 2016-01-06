@@ -74,6 +74,7 @@ public class LogUtil {
         }
     }
 
+
     public static void d(String tag, String message) {
         if (DEBUG_MODE) {
             printOut(logMessage(LEVEL_DEBUG, tag, getInvokeInfo(), message));
