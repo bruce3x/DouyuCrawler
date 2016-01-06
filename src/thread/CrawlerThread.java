@@ -1,5 +1,6 @@
 package thread;
 
+import db.BarrageDao;
 import handler.HttpHandler;
 import handler.MessageHandler;
 import handler.ResponseParser;
@@ -22,6 +23,7 @@ import java.util.UUID;
  */
 public class CrawlerThread implements Runnable {
 
+    private String roomName;
     private String roomUrl;
     private int rid = -1;
     private int gid = -1;
@@ -55,6 +57,7 @@ public class CrawlerThread implements Runnable {
                 }
             }
 
+            //获取到弹幕服务器地址和gid之后，结束此次监听
             finish = f1 && f2;
         }
 
@@ -65,16 +68,27 @@ public class CrawlerThread implements Runnable {
     };
 
     private MessageHandler.OnReceiveListener barrageListener = new MessageHandler.OnReceiveListener() {
+
+        private List<Barrage> barrages = new ArrayList<>();
+
         @Override
         public void onReceive(List<String> responses) {
 
             for (String response : responses) {
                 LogUtil.d("Receive Response", response);
 
-                if (response.contains("chatmessage")) {
-                    //解析弹幕
-                    Barrage barrage = ResponseParser.parseBarrage(response);
-                    if (barrage != null) LogUtil.i("Barrage", barrage.getName() + ":" + barrage.getContent());
+                if (!response.contains("chatmessage")) continue;
+
+                //解析弹幕
+                Barrage barrage = ResponseParser.parseBarrage(response);
+                if (barrage == null) continue;
+
+                barrages.add(barrage);
+                LogUtil.i("Barrage", barrage.getSnick() + ":" + barrage.getContent());
+
+                if (barrages.size() >= 20 && BarrageDao.saveBarrage(barrages)) {
+                    LogUtil.i("DB", "保存弹幕到数据库 ...");
+                    barrages.clear();
                 }
             }
         }
@@ -85,9 +99,10 @@ public class CrawlerThread implements Runnable {
         }
     };
 
-    public CrawlerThread(String roomUrl) {
+    public CrawlerThread(String roomName, String roomUrl) {
+        this.roomName = roomName;
         this.roomUrl = roomUrl;
-        LogUtil.i("Crawler启动 ...");
+        LogUtil.i("Crawler启动: " + roomName + " >> " + roomUrl + "");
     }
 
     @Override
@@ -95,15 +110,24 @@ public class CrawlerThread implements Runnable {
         //获取房间页面
         LogUtil.i("获取房间页面 ...");
         String s = HttpHandler.get(roomUrl);
+
         //获取roomId
         LogUtil.i("获取直播房间ID ...");
         rid = ResponseParser.parseRoomId(s);
+
+        //检查是否在线
+        boolean online = ResponseParser.parseOnline(s);
+        if (!online) {
+            LogUtil.w("该房间还没有直播！" + roomUrl);
+            return;
+        }
+
         //获取服务器IP列表
         LogUtil.i("获取服务器列表 ...");
         List<ServerInfo> serverList = ResponseParser.parseServerInfo(s);
 
         if (serverList == null || serverList.size() <= 0) {
-            LogUtil.e("获取服务器列表失败！");
+            LogUtil.w("获取服务器列表失败！");
             LogUtil.i("Crawler结束 ...");
             return;
         }
@@ -126,7 +150,7 @@ public class CrawlerThread implements Runnable {
         try {
 
             if (barrageServers == null || barrageServers.size() <= 0) {
-                LogUtil.e("没有可用的弹幕服务器 ...");
+                LogUtil.w("没有可用的弹幕服务器 ...");
                 return;
             }
             ServerInfo barrageServer = barrageServers.get((int) (Math.random() * barrageServers.size()));
@@ -141,13 +165,16 @@ public class CrawlerThread implements Runnable {
 
             LogUtil.i("开始接收弹幕 ...");
             LogUtil.i("----------------------------------------------------------------");
+
+            BarrageDao.createTable();
+
             MessageHandler.receive(socket, barrageListener);
 
 
         } catch (IOException e) {
             e.printStackTrace();
             LogUtil.d("Error", e.toString());
-            LogUtil.e("与服务器连接失败!");
+            LogUtil.w("与服务器连接失败!");
         }
     }
 
@@ -173,7 +200,7 @@ public class CrawlerThread implements Runnable {
 
         } catch (IOException e) {
             LogUtil.d("Error", e.toString());
-            LogUtil.e("登陆到服务器失败！");
+            LogUtil.w("登陆到服务器失败！");
         } finally
 
         {
@@ -182,7 +209,7 @@ public class CrawlerThread implements Runnable {
                     socket.close();
                 } catch (IOException e) {
                     LogUtil.d("Error", e.toString());
-                    LogUtil.e("连接关闭异常！");
+                    LogUtil.w("连接关闭异常！");
                 }
         }
     }

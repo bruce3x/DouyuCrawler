@@ -7,10 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by zero on 2016/01/04.
@@ -22,10 +19,14 @@ public class Config {
 
     public static boolean DEBUG_MODE = true;
 
-    public static List<String> ROOM_LIST = new ArrayList<>();
+    /**
+     * 键  房间简称( 即room.url.XXX中的XXX )
+     * 值  房间地址
+     */
+    public static Map<String, String> ROOM_MAP = new HashMap<>();
 
     static {
-        InputStream in= null;
+        InputStream in = null;
         try {
             Properties properties = new Properties();
             in = new FileInputStream(new File(PROPERTIES_NAME));
@@ -37,7 +38,9 @@ public class Config {
             for (Object object : objects) {
                 String key = (String) object;
                 if (key.startsWith("room.url.")) {
-                    ROOM_LIST.add(properties.getProperty(key));
+                    String name = key.substring(9).trim();
+                    if (name.length() > 0)
+                        ROOM_MAP.put(name, properties.getProperty(key));
                 }
             }
 
@@ -47,36 +50,32 @@ public class Config {
             displayConfig();
 
         } catch (Exception e) {
-            e.printStackTrace();
-            LogUtil.e("读取配置信息失败！");
-        }
-        finally {
+            LogUtil.e(e.toString());
+            LogUtil.w("读取配置信息失败！");
+        } finally {
             if (in != null) {
                 try {
                     in.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LogUtil.e(e.toString());
                 }
             }
         }
     }
 
     private static void displayConfig() {
-        LogUtil.d("Config", "################################");
+        LogUtil.d("Config", "----------------------------------------------------------------");
 
         LogUtil.d("Config", "DEBUG_MODE: " + DEBUG_MODE);
-        for (String s : ROOM_LIST) {
-            LogUtil.d("Config", "ROOM_LIST_URL: " + s);
+        Set<String> nameSet = ROOM_MAP.keySet();
+        for (String name : nameSet) {
+            LogUtil.d("Config", "ROOM_URL: " + name +" >> "+ROOM_MAP.get(name));
         }
 
-        LogUtil.d("Config", "################################");
+        LogUtil.d("Config", "----------------------------------------------------------------");
     }
 
-
     public static void main(String[] args) {
-        System.out.println(DEBUG_MODE);
-        for (String s : ROOM_LIST) {
-            System.out.println(s);
-        }
+
     }
 }

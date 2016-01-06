@@ -14,17 +14,21 @@ import java.util.regex.Pattern;
  * Douyu
  */
 public class ResponseParser {
-    private static final String REG_ROOM_ID = "<input.*?id=\"task_roomid\".*?value=\"(\\d*?)\".*?/>";
+//    private static final String REG_ROOM_ID = "<input.*?id=\"task_roomid\".*?value=\"(\\d*?)\".*?/>";
+
+    private static final String REG_ROOM_ID = "\"room_id\":(\\d*),";
+    private static final String REG_ROOM_STATUS = "\"show_status\":(\\d*),";
     private static final String REG_SERVER = "%7B%22ip%22%3A%22(.*?)%22%2C%22port%22%3A%22(.*?)%22%7D%2C";
     private static final String REG_GROUP_ID = "type@=setmsggroup.*/rid@=(\\d*?)/gid@=(\\d*?)/";
     private static final String REG_BARRAGE_SERVER = "/ip@=(.*?)/port@=(\\d*?)/";
-    private static final String REG_CHAT_BARRAGE = "type@=chatmessage/.*/content@=(.*?)/snick@=(.*?)/";
+    private static final String REG_CHAT_BARRAGE = "type@=chatmessage/.*/sender@=(\\d.*?)/content@=(.*?)/snick@=(.*?)/.*/rid@=(\\d*?)/";
 
 
     private static Matcher getMatcher(String content, String regex) {
         Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
         return pattern.matcher(content);
     }
+
 
     /**
      * 从房间页面解析出roomId
@@ -40,6 +44,17 @@ public class ResponseParser {
 
         LogUtil.d("Parse RoomId", rid + "");
         return rid;
+    }
+
+    /**
+     * 解析当前直播状态
+     * @return 若room_status == 1 则正在直播
+     */
+    public static boolean parseOnline(String content) {
+        if (content == null) return false;
+
+        Matcher matcher = getMatcher(content, REG_ROOM_STATUS);
+        return matcher.find() && "1".equals(matcher.group(1));
     }
 
     /**
@@ -106,11 +121,16 @@ public class ResponseParser {
         Barrage barrage = null;
 
         if (matcher.find()) {
-            barrage = new Barrage(matcher.group(2), matcher.group(1));
+            barrage = new Barrage(Integer.parseInt(matcher.group(1)),
+                    matcher.group(3),
+                    matcher.group(2),
+                    Integer.parseInt(matcher.group(4)));
         }
 
         LogUtil.d("Parse Barrage", barrage + "");
 
         return barrage;
     }
+
+
 }
