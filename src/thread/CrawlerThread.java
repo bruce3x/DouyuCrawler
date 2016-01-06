@@ -32,6 +32,8 @@ public class CrawlerThread implements Runnable {
 
     private MessageHandler.OnReceiveListener loginListener = new MessageHandler.OnReceiveListener() {
         private boolean finish = false;
+        private long start = System.currentTimeMillis();
+        private final int TIME_OUT = 10 * 1000;
 
         @Override
         public void onReceive(List<String> responses) {
@@ -57,8 +59,11 @@ public class CrawlerThread implements Runnable {
                 }
             }
 
-            //获取到弹幕服务器地址和gid之后，结束此次监听
-            finish = f1 && f2;
+            long now = System.currentTimeMillis();
+
+            //获取到弹幕服务器地址和gid 或者超时之后，结束此次监听
+
+            finish = f1 && f2 || (now - start) > TIME_OUT;
         }
 
         @Override
@@ -195,8 +200,8 @@ public class CrawlerThread implements Runnable {
             String vk = MD5Util.MD5(timestamp + "7oE9nPEG9xXV69phU31FYCLUagKeYtsF" + uuid);
             //发送登陆请求
             MessageHandler.send(socket, Request.gid(rid, uuid, timestamp, vk));
-            //等待5s，获取返回数据
-            MessageHandler.receive(socket, 5 * 1000, loginListener);
+            //等待接收
+            MessageHandler.receive(socket, loginListener);
 
         } catch (IOException e) {
             LogUtil.d("Error", e.toString());

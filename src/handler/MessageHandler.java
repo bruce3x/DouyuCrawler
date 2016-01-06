@@ -40,24 +40,14 @@ public class MessageHandler {
      */
     public static void receive(Socket socket, MessageHandler.OnReceiveListener listener)
             throws IOException {
-        receive(socket, Integer.MAX_VALUE, listener);
-    }
-
-    /**
-     * 接收消息，仅持续一定时间
-     */
-    public static void receive(Socket socket, int timeout, MessageHandler.OnReceiveListener listener)
-            throws IOException {
         if (socket == null || !socket.isConnected()) return;
 
         int len;
-        byte[] buffer = new byte[4 * 1024];
+        byte[] buffer = new byte[8 * 1024];
         InputStream in = socket.getInputStream();
-        long start = System.currentTimeMillis();
 
         while (socket.isConnected() //链接结束
                 && (len = in.read(buffer)) != -1 //输入流结束
-                && (System.currentTimeMillis() - start) < timeout //超时限制
                 ) {
             if (listener != null) {
                 listener.onReceive(splitResponse(Arrays.copyOf(buffer, len)));
