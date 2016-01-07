@@ -1,16 +1,16 @@
-package thread;
+package me.brucezz.crawler.thread;
 
-import db.BarrageDao;
-import handler.HttpHandler;
-import handler.MessageHandler;
-import handler.ResponseParser;
-import model.Barrage;
-import model.Request;
-import model.ServerInfo;
-import util.LogUtil;
-import util.MD5Util;
-import util.SttCode;
-import util.TimeHelper;
+import me.brucezz.crawler.handler.HttpHandler;
+import me.brucezz.crawler.model.Request;
+import me.brucezz.crawler.model.ServerInfo;
+import me.brucezz.crawler.util.LogUtil;
+import me.brucezz.crawler.util.MD5Util;
+import me.brucezz.crawler.db.BarrageDao;
+import me.brucezz.crawler.handler.MessageHandler;
+import me.brucezz.crawler.handler.ResponseParser;
+import me.brucezz.crawler.model.Barrage;
+import me.brucezz.crawler.util.SttCode;
+import me.brucezz.crawler.util.TimeHelper;
 
 import java.io.IOException;
 import java.net.Socket;

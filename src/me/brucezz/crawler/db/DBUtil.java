@@ -1,6 +1,6 @@
-package db;
+package me.brucezz.crawler.db;
 
-import util.LogUtil;
+import me.brucezz.crawler.util.LogUtil;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

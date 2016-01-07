@@ -1,4 +1,4 @@
-package util;
+package me.brucezz.crawler.util;
 
 /**
  * Created by zero on 2016/01/07.

@@ -1,4 +1,4 @@
-package model;
+package me.brucezz.crawler.model;
 
 /**
  * Created by zero on 2016/01/05.

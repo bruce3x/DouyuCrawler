@@ -1,7 +1,7 @@
-package config;
+package me.brucezz.crawler.config;
 
 
-import util.LogUtil;
+import me.brucezz.crawler.util.LogUtil;
 
 import java.io.File;
 import java.io.FileInputStream;

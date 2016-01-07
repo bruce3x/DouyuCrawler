@@ -1,6 +1,6 @@
-package util;
+package me.brucezz.crawler.util;
 
-import config.Config;
+import me.brucezz.crawler.config.Config;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

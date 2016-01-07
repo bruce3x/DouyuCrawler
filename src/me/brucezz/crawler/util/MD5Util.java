@@ -1,4 +1,4 @@
-package util;
+package me.brucezz.crawler.util;
 
 import java.security.MessageDigest;
 

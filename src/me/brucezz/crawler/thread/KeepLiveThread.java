@@ -1,8 +1,8 @@
-package thread;
+package me.brucezz.crawler.thread;
 
-import handler.MessageHandler;
-import model.Request;
-import util.LogUtil;
+import me.brucezz.crawler.util.LogUtil;
+import me.brucezz.crawler.handler.MessageHandler;
+import me.brucezz.crawler.model.Request;
 
 import java.io.IOException;
 import java.net.Socket;

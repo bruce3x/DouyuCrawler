@@ -1,8 +1,8 @@
-package handler;
+package me.brucezz.crawler.handler;
 
-import model.Barrage;
-import model.ServerInfo;
-import util.LogUtil;
+import me.brucezz.crawler.model.ServerInfo;
+import me.brucezz.crawler.util.LogUtil;
+import me.brucezz.crawler.model.Barrage;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,7 @@
+package me.brucezz.crawler;
 
-import config.Config;
-import thread.CrawlerThread;
+import me.brucezz.crawler.config.Config;
+import me.brucezz.crawler.thread.CrawlerThread;
 
 import java.util.Set;
 

@@ -1,4 +1,4 @@
-package model;
+package me.brucezz.crawler.model;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

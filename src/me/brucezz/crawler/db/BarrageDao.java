@@ -1,7 +1,7 @@
-package db;
+package me.brucezz.crawler.db;
 
-import model.Barrage;
-import util.LogUtil;
+import me.brucezz.crawler.util.LogUtil;
+import me.brucezz.crawler.model.Barrage;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

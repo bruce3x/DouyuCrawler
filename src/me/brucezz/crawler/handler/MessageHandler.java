@@ -1,8 +1,8 @@
-package handler;
+package me.brucezz.crawler.handler;
 
-import model.Message;
-import util.HexUtil;
-import util.LogUtil;
+import me.brucezz.crawler.model.Message;
+import me.brucezz.crawler.util.HexUtil;
+import me.brucezz.crawler.util.LogUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

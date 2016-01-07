@@ -1,6 +1,6 @@
-package handler;
+package me.brucezz.crawler.handler;
 
-import util.LogUtil;
+import me.brucezz.crawler.util.LogUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
