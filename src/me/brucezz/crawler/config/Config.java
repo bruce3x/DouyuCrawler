@@ -7,7 +7,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * Created by zero on 2016/01/04.
@@ -46,12 +49,10 @@ public class Config {
 
             Set<Object> objects = properties.keySet();
             for (Object object : objects) {
-                String key = (String) object;
-                if (key.startsWith("room.url.")) {
-                    String name = key.substring(9).trim();
-                    if (name.length() > 0)
-                        ROOM_MAP.put(name, properties.getProperty(key));
-                }
+                String key = ((String) object).trim();
+                if (!key.startsWith("room.url.") || key.length() <= 9) continue;
+
+                ROOM_MAP.put(key.substring(9), properties.getProperty(key));
             }
 
             loadSuccess = true;

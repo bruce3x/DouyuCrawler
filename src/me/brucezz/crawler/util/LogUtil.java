@@ -28,20 +28,25 @@ public class LogUtil {
          * Log格式
          *
          * - 非调试模式 INFO/WARNING
-         * [timestamp][level][TAG][Message]
+         * [Timestamp][Level][Thread][TAG][Message]
          *
          * - 调试模式 DEBUG/ERROR
-         * [timestamp][level][TAG][InvokeInfo][Message]
+         * [Timestamp][Level][Thread][TAG][InvokeInfo][Message]
+         *
          */
-        // TODO: 16-1-7 Log格式添加 多任务id
 
-        return String.format("[%s][%s][%s] %s", timestamp(), level, tag, message);
+        return String.format("[%s][%s][%s][%s] %s",
+                timestamp(), level,
+                Thread.currentThread().getName(),//当期线程名
+                tag, message);
     }
 
     private static String logMessage(String level, String tag, String invokeInfo, String message) {
-        return String.format("[%s][%s][%s][%s] %s", timestamp(), level, tag, invokeInfo, message);
+        return String.format("[%s][%s][%s][%S][%s] %s",
+                timestamp(), level,
+                Thread.currentThread().getName(),//当期线程名
+                tag, invokeInfo, message);
     }
-
 
     private static void printOut(String log) {
         System.out.println(log);
@@ -63,7 +68,6 @@ public class LogUtil {
             printOut(logMessage(LEVEL_DEBUG, tag, getInvokeInfo(), message));
         }
     }
-
 
     public static void e(String message) {
         if (DEBUG_MODE) {

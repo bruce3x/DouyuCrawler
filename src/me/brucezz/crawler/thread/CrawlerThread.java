@@ -1,6 +1,6 @@
 package me.brucezz.crawler.thread;
 
-import me.brucezz.crawler.handler.HttpHandler;
+import me.brucezz.crawler.util.HttpUtil;
 import me.brucezz.crawler.model.Request;
 import me.brucezz.crawler.model.ServerInfo;
 import me.brucezz.crawler.util.LogUtil;
@@ -30,7 +30,7 @@ public class CrawlerThread implements Runnable {
     private int gid = -1;
     List<ServerInfo> barrageServers = new ArrayList<>();
 
-
+    //请求登陆服务器回调
     private MessageHandler.OnReceiveListener loginListener = new MessageHandler.OnReceiveListener() {
         private boolean finish = false;
         private TimeHelper helper = new TimeHelper(10 * 1000);//10秒等待超时
@@ -71,6 +71,7 @@ public class CrawlerThread implements Runnable {
         }
     };
 
+    //请求弹幕服务器回调
     private MessageHandler.OnReceiveListener barrageListener = new MessageHandler.OnReceiveListener() {
 
         private boolean finished = false;
@@ -112,14 +113,14 @@ public class CrawlerThread implements Runnable {
     public CrawlerThread(String roomName, String roomUrl) {
         this.roomName = roomName;
         this.roomUrl = roomUrl;
-        LogUtil.i("Crawler启动: " + roomName + " >> " + roomUrl + "");
+        LogUtil.i("Crawler-" + roomName + " 启动: target >> " + roomUrl + "");
     }
 
     @Override
     public void run() {
         //获取房间页面
         LogUtil.i("获取房间页面 ...");
-        String pageHtml = HttpHandler.get(roomUrl);
+        String pageHtml = HttpUtil.get(roomUrl);
 
         //获取roomId
         LogUtil.i("获取直播房间ID ...");
@@ -129,6 +130,7 @@ public class CrawlerThread implements Runnable {
         boolean online = ResponseParser.parseOnline(pageHtml);
         if (!online) {
             LogUtil.w("该房间还没有直播！" + roomUrl);
+            onExit();
             return;
         }
 
@@ -138,7 +140,7 @@ public class CrawlerThread implements Runnable {
 
         if (serverList == null || serverList.size() <= 0) {
             LogUtil.w("获取服务器列表失败！");
-            LogUtil.i("Crawler结束 ...");
+            onExit();
             return;
         }
 
@@ -146,14 +148,14 @@ public class CrawlerThread implements Runnable {
         loginRequest(serverList);
 
         if (rid == -1 || gid == -1) {
-            LogUtil.i("Crawler结束 ...");
+            onExit();
             return;
         }
 
         //开始抓取弹幕
         startCrawler();
 
-        LogUtil.i("Crawler结束 ...");
+        onExit();
     }
 
     private void startCrawler() {
@@ -170,8 +172,8 @@ public class CrawlerThread implements Runnable {
             LogUtil.i("进入 " + rid + " 号房间， " + gid + " 号弹幕群组 ...");
             MessageHandler.send(socket, Request.joinGroup(rid, gid));
 
-            //心跳包线程
-            new Thread(new KeepLiveThread(socket)).start();
+            //心跳包线程启动
+            new Thread(new KeepLiveThread(socket), "KeepLive-" + roomName).start();
 
             LogUtil.i("开始接收弹幕 ...");
             LogUtil.i("----------------------------------------------------------------");
@@ -211,9 +213,7 @@ public class CrawlerThread implements Runnable {
         } catch (IOException e) {
             LogUtil.d("Error", e.toString());
             LogUtil.w("登陆到服务器失败！");
-        } finally
-
-        {
+        } finally {
             if (socket != null)
                 try {
                     socket.close();
@@ -228,8 +228,15 @@ public class CrawlerThread implements Runnable {
      * 判断当前房间是否在直播
      */
     private boolean isOnline() {
-        String pageHtml = HttpHandler.get(roomUrl);
+        String pageHtml = HttpUtil.get(roomUrl);
         return pageHtml != null && ResponseParser.parseOnline(pageHtml);
+    }
+
+    /**
+     * 退出时调用
+     */
+    private void onExit() {
+        LogUtil.i("Crawler-" + roomName + " 结束 ...");
     }
 
 }

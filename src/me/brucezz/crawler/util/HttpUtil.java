@@ -1,6 +1,4 @@
-package me.brucezz.crawler.handler;
-
-import me.brucezz.crawler.util.LogUtil;
+package me.brucezz.crawler.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +11,7 @@ import java.net.URL;
  * Created by zero on 2016/01/04.
  * Douyu
  */
-public class HttpHandler {
+public class HttpUtil {
 
     /**
      * GET方法

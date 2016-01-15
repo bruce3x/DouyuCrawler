@@ -17,7 +17,7 @@ public class Main {
         Set<String> nameSet = Config.ROOM_MAP.keySet();
 
         for (String name : nameSet) {
-            new Thread(new CrawlerThread(name, Config.ROOM_MAP.get(name))).start();
+            new Thread(new CrawlerThread(name, Config.ROOM_MAP.get(name)), "Crawler-"+name).start();
         }
     }
 }
