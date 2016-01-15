@@ -5,30 +5,36 @@ public class HexUtil {
     private final static String HEX_STRING = "0123456789ABCDEF";
     private final static byte[] HEX_BYTE = HEX_STRING.getBytes();
 
-    // 从字节数组到十六进制字符串转换  
-    public static String Bytes2HexString(byte[] b) {
+    /**
+     * @return 字节数组 转换为 十六进制字符串， 大写， '-'连接
+     */
+    private static String bytes2Hex(byte[] b) {
         byte[] buff = new byte[3 * b.length];
         for (int i = 0; i < b.length; i++) {
             buff[3 * i] = HEX_BYTE[(b[i] >> 4) & 0x0f];
             buff[3 * i + 1] = HEX_BYTE[b[i] & 0x0f];
             buff[3 * i + 2] = 45;
         }
-        String re = new String(buff);
-        return re.replace("-", " ");
+        return new String(buff);
     }
 
-    public static String Bytes2HexStringWithOutSpace(byte[] b) {
-        byte[] buff = new byte[3 * b.length];
-        for (int i = 0; i < b.length; i++) {
-            buff[3 * i] = HEX_BYTE[(b[i] >> 4) & 0x0f];
-            buff[3 * i + 1] = HEX_BYTE[b[i] & 0x0f];
-            buff[3 * i + 2] = 45;
-        }
-        String re = new String(buff);
-        return re.replace("-", "");
+    /**
+     * @return 大写，无间隔
+     */
+    public static String bytes2HexString(byte[] b) {
+        return bytes2Hex(b).replace("-", "");
     }
 
-    // 从十六进制字符串到字节数组转换
+    /**
+     * @return 大写，' '空格连接
+     */
+    public static String bytes2HexStringWithSpace(byte[] b) {
+        return bytes2Hex(b).replace("-", " ");
+    }
+
+    /**
+     * @return 十六进制字符串 转换为 字节数组
+     */
     public static byte[] hexString2Bytes(String hexString) {
         if (hexString == null || hexString.equals("")) {
             return null;
@@ -49,6 +55,5 @@ public class HexUtil {
     private static byte charToByte(char c) {
         return (byte) HEX_STRING.indexOf(c);
     }
-
 
 }

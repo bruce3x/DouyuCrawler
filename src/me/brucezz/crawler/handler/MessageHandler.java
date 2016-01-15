@@ -54,19 +54,24 @@ public class MessageHandler {
 
     /**
      * 分离同时返回的多组数据
+     * 不优雅的方法：
+     *      1.先将字节数组转化为对应的十六进制字符串
+     *      2.然后用斗鱼定义的请求码"b2020000"来分割字符串
+     *      3.判断"00"为消息尾部
+     *      4.遍历分离出多组Response
      */
     public static List<String> splitResponse(byte[] buffer) {
         if (buffer == null || buffer.length <= 0) return null;
 
         List<String> resList = new ArrayList<>();
-        String byteArray = HexUtil.Bytes2HexStringWithOutSpace(buffer).toLowerCase();
+        String byteArray = HexUtil.bytes2HexString(buffer).toLowerCase();
 
-        String[] strings = byteArray.split("b2020000");
+        String[] responseStrings = byteArray.split("b2020000");
         int end;
-        for (int i = 1; i < strings.length; i++) {
-            if (!strings[i].contains("00")) continue;
-            end = strings[i].indexOf("00");
-            byte[] bytes = HexUtil.hexString2Bytes(strings[i].substring(0, end));
+        for (int i = 1; i < responseStrings.length; i++) {
+            if (!responseStrings[i].contains("00")) continue;
+            end = responseStrings[i].indexOf("00");
+            byte[] bytes = HexUtil.hexString2Bytes(responseStrings[i].substring(0, end));
             if (bytes != null) resList.add(new String(bytes));
         }
 
