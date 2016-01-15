@@ -1,6 +1,6 @@
 package me.brucezz.crawler.handler;
 
-import me.brucezz.crawler.model.Message;
+import me.brucezz.crawler.bean.Message;
 import me.brucezz.crawler.util.HexUtil;
 import me.brucezz.crawler.util.LogUtil;
 

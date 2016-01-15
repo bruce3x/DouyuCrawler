@@ -2,7 +2,7 @@ package me.brucezz.crawler.thread;
 
 import me.brucezz.crawler.util.LogUtil;
 import me.brucezz.crawler.handler.MessageHandler;
-import me.brucezz.crawler.model.Request;
+import me.brucezz.crawler.bean.Request;
 
 import java.io.IOException;
 import java.net.Socket;

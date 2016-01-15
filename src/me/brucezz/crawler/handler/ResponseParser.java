@@ -1,8 +1,8 @@
 package me.brucezz.crawler.handler;
 
-import me.brucezz.crawler.model.ServerInfo;
+import me.brucezz.crawler.bean.ServerInfo;
 import me.brucezz.crawler.util.LogUtil;
-import me.brucezz.crawler.model.Barrage;
+import me.brucezz.crawler.bean.Barrage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
  * Douyu
  */
 public class ResponseParser {
-//    private static final String REG_ROOM_ID = "<input.*?id=\"task_roomid\".*?value=\"(\\d*?)\".*?/>";
 
     private static final String REG_ROOM_ID = "\"room_id\":(\\d*),";
     private static final String REG_ROOM_STATUS = "\"show_status\":(\\d*),";

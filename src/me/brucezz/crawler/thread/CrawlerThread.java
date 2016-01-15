@@ -1,14 +1,14 @@
 package me.brucezz.crawler.thread;
 
 import me.brucezz.crawler.util.HttpUtil;
-import me.brucezz.crawler.model.Request;
-import me.brucezz.crawler.model.ServerInfo;
+import me.brucezz.crawler.bean.Request;
+import me.brucezz.crawler.bean.ServerInfo;
 import me.brucezz.crawler.util.LogUtil;
 import me.brucezz.crawler.util.MD5Util;
 import me.brucezz.crawler.db.BarrageDao;
 import me.brucezz.crawler.handler.MessageHandler;
 import me.brucezz.crawler.handler.ResponseParser;
-import me.brucezz.crawler.model.Barrage;
+import me.brucezz.crawler.bean.Barrage;
 import me.brucezz.crawler.util.SttCode;
 import me.brucezz.crawler.util.TimeHelper;
 
@@ -58,8 +58,6 @@ public class CrawlerThread implements Runnable {
                     f2 = true;
                 }
             }
-
-            long now = System.currentTimeMillis();
 
             //获取到弹幕服务器地址和gid 或者超时之后，结束此次监听
             finish = f1 && f2 || helper.checkTimeout();

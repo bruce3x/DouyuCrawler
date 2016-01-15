@@ -1,4 +1,4 @@
-package me.brucezz.crawler.model;
+package me.brucezz.crawler.bean;
 
 import java.util.Date;
 

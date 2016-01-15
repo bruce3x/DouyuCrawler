@@ -1,7 +1,7 @@
 package me.brucezz.crawler.db;
 
 import me.brucezz.crawler.util.DBUtil;
-import me.brucezz.crawler.model.Barrage;
+import me.brucezz.crawler.bean.Barrage;
 import me.brucezz.crawler.util.DateUtil;
 
 import java.util.ArrayList;

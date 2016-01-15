@@ -1,4 +1,4 @@
-package me.brucezz.crawler.model;
+package me.brucezz.crawler.bean;
 
 /**
  * Created by zero on 2016/01/05.
