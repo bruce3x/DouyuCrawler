@@ -11,7 +11,6 @@ import java.util.Set;
  */
 public class Main {
     public static void main(String[] args) {
-
         if (!Config.loadSuccess) return;
 
         Set<String> nameSet = Config.ROOM_MAP.keySet();
