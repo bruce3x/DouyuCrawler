@@ -33,6 +33,9 @@ public class Message {
         end = new int[]{0x00};
     }
 
+    /**
+     * 计算消息体长度
+     */
     private int calcMessageLength(String content) {
         return 4 + 4 + (content == null ? 0 : content.length()) + 1;
     }
@@ -88,14 +91,13 @@ public class Message {
                 '}';
     }
 
-    /**
-     * 把Message对象填充到ByteArrayOutputStream里
-     *
-     * @throws IOException
-     */
-    public void putIntoStream(ByteArrayOutputStream baos) throws IOException {
-        if (baos == null) return;
+    private  ByteArrayOutputStream baos;
 
+    /**
+     * 将Message对象转化为字节数组
+     */
+    public byte[] getBytes() throws IOException {
+        if (baos == null ) baos = new ByteArrayOutputStream();
         baos.reset();
 
         for (int b : length) baos.write(b);
@@ -104,5 +106,6 @@ public class Message {
         if (content != null) baos.write(content.getBytes());
         for (int b : end) baos.write(b);
 
+        return baos.toByteArray();
     }
 }

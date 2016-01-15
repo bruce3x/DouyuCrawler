@@ -19,6 +19,11 @@ public class Config {
 
     public static boolean DEBUG_MODE = true;
 
+    public static boolean DB_ENABLE = false;
+    public static String DB_NAME = null;
+    public static String DB_USERNAME = null;
+    public static String DB_PASSWORD = null;
+
     /**
      * 键  房间简称( 即room.url.XXX中的XXX )
      * 值  房间地址
@@ -34,6 +39,11 @@ public class Config {
 
             DEBUG_MODE = Boolean.parseBoolean(properties.getProperty("debug"));
 
+            DB_ENABLE = Boolean.parseBoolean(properties.getProperty("db.enable"));
+            DB_NAME = properties.getProperty("db.name");
+            DB_USERNAME = properties.getProperty("db.username");
+            DB_PASSWORD = properties.getProperty("db.password");
+
             Set<Object> objects = properties.keySet();
             for (Object object : objects) {
                 String key = (String) object;
@@ -47,7 +57,7 @@ public class Config {
             loadSuccess = true;
             LogUtil.i("读取配置信息成功！");
 
-            displayConfig();
+            showConfig();
 
         } catch (Exception e) {
             LogUtil.e(e.toString());
@@ -63,13 +73,14 @@ public class Config {
         }
     }
 
-    private static void displayConfig() {
+    private static void showConfig() {
         LogUtil.d("Config", "----------------------------------------------------------------");
 
         LogUtil.d("Config", "DEBUG_MODE: " + DEBUG_MODE);
+        LogUtil.d("Config", "DB_ENABLE: " + DB_ENABLE);
         Set<String> nameSet = ROOM_MAP.keySet();
         for (String name : nameSet) {
-            LogUtil.d("Config", "ROOM_URL: " + name +" >> "+ROOM_MAP.get(name));
+            LogUtil.d("Config", "ROOM_URL: " + name + " >> " + ROOM_MAP.get(name));
         }
 
         LogUtil.d("Config", "----------------------------------------------------------------");

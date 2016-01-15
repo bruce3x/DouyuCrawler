@@ -5,6 +5,10 @@ package me.brucezz.crawler.util;
  * Douyu
  */
 public class TimeHelper {
+    /**
+     * 时间工具类，预设一个超时时间timeout
+     * 提供方法来检查当前时间间隔是否足够
+     */
     private int timeout = 0;
     private long last = 0;
 
@@ -13,11 +17,14 @@ public class TimeHelper {
         last = System.currentTimeMillis();
     }
 
+    /**
+     * @return 如果时间间隔足够，返回true，并更新记录时间
+     */
     public boolean checkTimeout() {
         long now = System.currentTimeMillis();
 
-        boolean r = (now - last) > timeout;
-        last = now;
-        return r;
+        boolean isTimeout = (now - last) > timeout;
+        if (isTimeout) last = now;
+        return isTimeout;
     }
 }

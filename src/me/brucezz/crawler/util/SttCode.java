@@ -8,7 +8,7 @@ import java.util.Map;
  * Created by zero on 2016/01/05.
  * Douyu
  *
- * 服务器返回数据 编解码
+ * 服务器返回数据 编解码， 根据JS代码转化过来的
  */
 public class SttCode {
 

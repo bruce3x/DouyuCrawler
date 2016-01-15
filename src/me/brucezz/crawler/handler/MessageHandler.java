@@ -4,7 +4,6 @@ import me.brucezz.crawler.model.Message;
 import me.brucezz.crawler.util.HexUtil;
 import me.brucezz.crawler.util.LogUtil;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -27,10 +26,7 @@ public class MessageHandler {
 
         Message message = new Message(content);
         OutputStream out = socket.getOutputStream();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        message.putIntoStream(baos);
-
-        out.write(baos.toByteArray());
+        out.write(message.getBytes());
 
         LogUtil.d("Send Message", message.toString());
     }
@@ -63,7 +59,7 @@ public class MessageHandler {
         if (buffer == null || buffer.length <= 0) return null;
 
         List<String> resList = new ArrayList<>();
-        String byteArray = HexUtil.Bytes2HexStringWithOutSpace(buffer).toLowerCase();
+        String byteArray = HexUtil.bytes2HexString(buffer);
 
         String[] strings = byteArray.split("b2020000");
         int end;

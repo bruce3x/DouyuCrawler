@@ -26,6 +26,9 @@ public class MD5Util {
                 str[k++] = hexDigits[byte0 & 0xf];
             }
             return new String(str).toLowerCase();
+
+//            // 把密文转换成十六进制的字符串形式
+//            return HexUtil.bytes2HexString(md);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

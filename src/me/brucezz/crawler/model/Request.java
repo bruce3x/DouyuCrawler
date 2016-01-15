@@ -5,10 +5,16 @@ package me.brucezz.crawler.model;
  * Douyu
  */
 public class Request {
+    /**
+     * 程序需要发送的各种请求正文
+     */
 
     public static String gid(int roomId, String devid, String rt, String vk) {
-
         return String.format("type@=loginreq/username@=/ct@=0/password@=/roomid@=%d/devid@=%s/rt@=%s/vk@=%s/ver@=20150929/", roomId, devid, rt, vk);
+    }
+
+    public static String qrl(int roomId) {
+        return String.format("type@=qrl/rid@=%d", roomId);
     }
 
     public static String barrageLogin(int roomId) {
@@ -21,6 +27,5 @@ public class Request {
 
     public static String keepLive(int tick) {
         return String.format("type@=keeplive/tick@=%d/", tick);
-//        return String.format("type@=mrkl/", tick);
     }
 }

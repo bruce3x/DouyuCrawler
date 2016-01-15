@@ -1,5 +1,6 @@
 package me.brucezz.crawler.thread;
 
+import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
 import me.brucezz.crawler.handler.HttpHandler;
 import me.brucezz.crawler.model.Request;
 import me.brucezz.crawler.model.ServerInfo;
@@ -204,7 +205,13 @@ public class CrawlerThread implements Runnable {
             String uuid = UUID.randomUUID().toString().replace("-", "").toUpperCase();
             String vk = MD5Util.MD5(timestamp + "7oE9nPEG9xXV69phU31FYCLUagKeYtsF" + uuid);
             //发送登陆请求
+//            MessageHandler.send(socket, Request.gid(rid, uuid, timestamp, vk));
+            rid = 25515;
+            uuid = "1C01371705D8B13361396AE2FAD50D6F";
+            vk = "dedd39371447fa3fd0bc41dd828e8109";
+            timestamp = "1452868253";
             MessageHandler.send(socket, Request.gid(rid, uuid, timestamp, vk));
+//            MessageHandler.send(socket, Request.qrl(rid));
             //等待接收
             MessageHandler.receive(socket, loginListener);
 
