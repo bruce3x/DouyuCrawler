@@ -8,8 +8,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by zero on 2016/01/04.
- * Douyu
+ * Created by Brucezz on 2016/01/04.
+ * DouyuCrawler
  */
 public class HttpUtil {
 

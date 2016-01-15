@@ -13,8 +13,8 @@ import java.util.Properties;
 import java.util.Set;
 
 /**
- * Created by zero on 2016/01/04.
- * Douyu
+ * Created by Brucezz on 2016/01/04.
+ * DouyuCrawler
  */
 public class Config {
     private static final String PROPERTIES_NAME = "conf.properties";

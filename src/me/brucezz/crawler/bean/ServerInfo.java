@@ -2,8 +2,8 @@ package me.brucezz.crawler.bean;
 
 
 /**
- * Created by zero on 2016/01/05.
- * Douyu
+ * Created by Brucezz on 2016/01/05.
+ * DouyuCrawler
  */
 public class ServerInfo {
     private String host;

@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * Created by zero on 2016/01/03.
- * Douyu
+ * Created by Brucezz on 2016/01/03.
+ * DouyuCrawler
  */
 public class Message {
 

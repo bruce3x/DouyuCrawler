@@ -1,8 +1,8 @@
 package me.brucezz.crawler.util;
 
 /**
- * Created by zero on 2016/01/07.
- * Douyu
+ * Created by Brucezz on 2016/01/07.
+ * DouyuCrawler
  */
 public class TimeHelper {
     /**

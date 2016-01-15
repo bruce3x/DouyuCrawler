@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.net.Socket;
 
 /**
- * Created by zero on 2016/01/04.
- * Douyu
+ * Created by Brucezz on 2016/01/04.
+ * DouyuCrawler
  */
 public class KeepLiveThread implements Runnable {
     private Socket s;

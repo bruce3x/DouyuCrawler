@@ -3,8 +3,8 @@ package me.brucezz.crawler.bean;
 import java.util.Date;
 
 /**
- * Created by zero on 2016/01/03.
- * Douyu
+ * Created by Brucezz on 2016/01/03.
+ * DouyuCrawler
  */
 public class Barrage {
 

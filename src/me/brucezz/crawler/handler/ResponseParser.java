@@ -10,8 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by zero on 2016/01/03.
- * Douyu
+ * Created by Brucezz on 2016/01/03.
+ * DouyuCrawler
  */
 public class ResponseParser {
 

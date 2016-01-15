@@ -3,11 +3,11 @@ package me.brucezz.crawler.util;
 import me.brucezz.crawler.config.Config;
 
 /**
- * Created by zero on 2016/01/05.
- * Douyu
+ * Created by Brucezz on 2016/01/05.
+ * DouyuCrawler
  */
 public class LogUtil {
-    // TODO: 16-1-7 Log持久化到本地
+    // TODO: 16-1-16 Log持久化到本地
 
     private static final boolean DEBUG_MODE = Config.DEBUG_MODE;
     private static final String DEFAULT_TAG = "TAG";

@@ -6,8 +6,8 @@ import me.brucezz.crawler.thread.CrawlerThread;
 import java.util.Set;
 
 /**
- * Created by zero on 2016/01/04.
- * Douyu
+ * Created by Brucezz on 2016/01/04.
+ * DouyuCrawler
  */
 public class Main {
     public static void main(String[] args) {

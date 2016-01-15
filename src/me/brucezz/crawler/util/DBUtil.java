@@ -9,6 +9,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by Brucezz on 2016/01/04.
+ * DouyuCrawler
+ */
 public class DBUtil {
 
     private static final String DB_NAME = Config.DB_NAME;
@@ -50,6 +54,7 @@ public class DBUtil {
 
     /**
      * 在一个事务里，依次执行一系列SQL
+     *
      * @return 如果执行成功返回 true, 否则 false
      */
     public static boolean execSQL(List<String> sqlList) {

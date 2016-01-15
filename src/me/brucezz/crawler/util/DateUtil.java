@@ -4,8 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by zero on 2016/01/15.
- * Douyu
+ * Created by Brucezz on 2016/01/15.
+ * DouyuCrawler
  */
 public class DateUtil {
 

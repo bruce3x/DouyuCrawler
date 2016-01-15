@@ -13,8 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by zero on 2016/01/04.
- * Douyu
+ * Created by Brucezz on 2016/01/04.
+ * DouyuCrawler
  */
 public class MessageHandler {
 

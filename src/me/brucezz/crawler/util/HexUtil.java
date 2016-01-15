@@ -1,6 +1,9 @@
 package me.brucezz.crawler.util;
 
-
+/**
+ * Created by Brucezz on 2016/01/04.
+ * DouyuCrawler
+ */
 public class HexUtil {
     private final static String HEX_STRING = "0123456789ABCDEF";
     private final static byte[] HEX_BYTE = HEX_STRING.getBytes();
