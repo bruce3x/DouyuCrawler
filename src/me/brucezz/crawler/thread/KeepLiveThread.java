@@ -1,15 +1,15 @@
-package thread;
+package me.brucezz.crawler.thread;
 
-import handler.MessageHandler;
-import model.Request;
-import util.LogUtil;
+import me.brucezz.crawler.util.LogUtil;
+import me.brucezz.crawler.handler.MessageHandler;
+import me.brucezz.crawler.bean.Request;
 
 import java.io.IOException;
 import java.net.Socket;
 
 /**
- * Created by zero on 2016/01/04.
- * Douyu
+ * Created by Brucezz on 2016/01/04.
+ * DouyuCrawler
  */
 public class KeepLiveThread implements Runnable {
     private Socket s;

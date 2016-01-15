@@ -1,8 +1,8 @@
-package handler;
+package me.brucezz.crawler.handler;
 
-import model.Barrage;
-import model.ServerInfo;
-import util.LogUtil;
+import me.brucezz.crawler.bean.ServerInfo;
+import me.brucezz.crawler.util.LogUtil;
+import me.brucezz.crawler.bean.Barrage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +10,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by zero on 2016/01/03.
- * Douyu
+ * Created by Brucezz on 2016/01/03.
+ * DouyuCrawler
  */
 public class ResponseParser {
-//    private static final String REG_ROOM_ID = "<input.*?id=\"task_roomid\".*?value=\"(\\d*?)\".*?/>";
 
     private static final String REG_ROOM_ID = "\"room_id\":(\\d*),";
     private static final String REG_ROOM_STATUS = "\"show_status\":(\\d*),";

@@ -1,10 +1,9 @@
-package handler;
+package me.brucezz.crawler.handler;
 
-import model.Message;
-import util.HexUtil;
-import util.LogUtil;
+import me.brucezz.crawler.bean.Message;
+import me.brucezz.crawler.util.HexUtil;
+import me.brucezz.crawler.util.LogUtil;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -14,8 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by zero on 2016/01/04.
- * Douyu
+ * Created by Brucezz on 2016/01/04.
+ * DouyuCrawler
  */
 public class MessageHandler {
 
@@ -27,10 +26,7 @@ public class MessageHandler {
 
         Message message = new Message(content);
         OutputStream out = socket.getOutputStream();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        message.putIntoStream(baos);
-
-        out.write(baos.toByteArray());
+        out.write(message.getBytes());
 
         LogUtil.d("Send Message", message.toString());
     }
@@ -40,24 +36,14 @@ public class MessageHandler {
      */
     public static void receive(Socket socket, MessageHandler.OnReceiveListener listener)
             throws IOException {
-        receive(socket, Integer.MAX_VALUE, listener);
-    }
-
-    /**
-     * 接收消息，仅持续一定时间
-     */
-    public static void receive(Socket socket, int timeout, MessageHandler.OnReceiveListener listener)
-            throws IOException {
         if (socket == null || !socket.isConnected()) return;
 
         int len;
-        byte[] buffer = new byte[4 * 1024];
+        byte[] buffer = new byte[8 * 1024];
         InputStream in = socket.getInputStream();
-        long start = System.currentTimeMillis();
 
         while (socket.isConnected() //链接结束
                 && (len = in.read(buffer)) != -1 //输入流结束
-                && (System.currentTimeMillis() - start) < timeout //超时限制
                 ) {
             if (listener != null) {
                 listener.onReceive(splitResponse(Arrays.copyOf(buffer, len)));
@@ -68,19 +54,24 @@ public class MessageHandler {
 
     /**
      * 分离同时返回的多组数据
+     * 不优雅的方法：
+     *      1.先将字节数组转化为对应的十六进制字符串
+     *      2.然后用斗鱼定义的请求码"b2020000"来分割字符串
+     *      3.判断"00"为消息尾部
+     *      4.遍历分离出多组Response
      */
     public static List<String> splitResponse(byte[] buffer) {
         if (buffer == null || buffer.length <= 0) return null;
 
         List<String> resList = new ArrayList<>();
-        String byteArray = HexUtil.Bytes2HexStringWithOutSpace(buffer).toLowerCase();
+        String byteArray = HexUtil.bytes2HexString(buffer).toLowerCase();
 
-        String[] strings = byteArray.split("b2020000");
+        String[] responseStrings = byteArray.split("b2020000");
         int end;
-        for (int i = 1; i < strings.length; i++) {
-            if (!strings[i].contains("00")) continue;
-            end = strings[i].indexOf("00");
-            byte[] bytes = HexUtil.hexString2Bytes(strings[i].substring(0, end));
+        for (int i = 1; i < responseStrings.length; i++) {
+            if (!responseStrings[i].contains("00")) continue;
+            end = responseStrings[i].indexOf("00");
+            byte[] bytes = HexUtil.hexString2Bytes(responseStrings[i].substring(0, end));
             if (bytes != null) resList.add(new String(bytes));
         }
 

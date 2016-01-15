@@ -1,6 +1,4 @@
-package handler;
-
-import util.LogUtil;
+package me.brucezz.crawler.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,10 +8,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by zero on 2016/01/04.
- * Douyu
+ * Created by Brucezz on 2016/01/04.
+ * DouyuCrawler
  */
-public class HttpHandler {
+public class HttpUtil {
 
     /**
      * GET方法

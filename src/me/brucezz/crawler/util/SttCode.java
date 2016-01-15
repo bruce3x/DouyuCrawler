@@ -1,14 +1,14 @@
-package util;
+package me.brucezz.crawler.util;
 
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by zero on 2016/01/05.
- * Douyu
+ * Created by Brucezz on 2016/01/05.
+ * DouyuCrawler
  *
- * 服务器返回数据 编解码
+ * 服务器返回数据 编解码， 根据JS代码转化过来的
  */
 public class SttCode {
 
