@@ -59,7 +59,7 @@ public class MessageHandler {
         if (buffer == null || buffer.length <= 0) return null;
 
         List<String> resList = new ArrayList<>();
-        String byteArray = HexUtil.bytes2HexString(buffer);
+        String byteArray = HexUtil.Bytes2HexStringWithOutSpace(buffer).toLowerCase();
 
         String[] strings = byteArray.split("b2020000");
         int end;
