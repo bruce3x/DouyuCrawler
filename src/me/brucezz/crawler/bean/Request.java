@@ -13,7 +13,7 @@ public class Request {
         return String.format("type@=loginreq/username@=/ct@=0/password@=/roomid@=%d/devid@=%s/rt@=%s/vk@=%s/ver@=20150929/", roomId, devid, rt, vk);
     }
 
-    public static String barrageLogin(int roomId) {
+    public static String danmakuLogin(int roomId) {
         return String.format("type@=loginreq/username@=visitor34807350/password@=1234567890123456/roomid@=%d/", roomId);
     }
 

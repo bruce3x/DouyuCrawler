@@ -1,16 +1,12 @@
 package me.brucezz.crawler.thread;
 
-import me.brucezz.crawler.util.HttpUtil;
+import me.brucezz.crawler.bean.Danmaku;
 import me.brucezz.crawler.bean.Request;
 import me.brucezz.crawler.bean.ServerInfo;
-import me.brucezz.crawler.util.LogUtil;
-import me.brucezz.crawler.util.MD5Util;
-import me.brucezz.crawler.db.BarrageDao;
+import me.brucezz.crawler.db.DanmakuDao;
 import me.brucezz.crawler.handler.MessageHandler;
 import me.brucezz.crawler.handler.ResponseParser;
-import me.brucezz.crawler.bean.Barrage;
-import me.brucezz.crawler.util.SttCode;
-import me.brucezz.crawler.util.TimeHelper;
+import me.brucezz.crawler.util.*;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -24,12 +20,11 @@ import java.util.UUID;
  */
 public class CrawlerThread implements Runnable {
 
+    List<ServerInfo> danmakuServers = new ArrayList<>();
     private String roomName;
     private String roomUrl;
     private int rid = -1;
     private int gid = -1;
-    List<ServerInfo> barrageServers = new ArrayList<>();
-
     //请求登陆服务器回调
     private MessageHandler.OnReceiveListener loginListener = new MessageHandler.OnReceiveListener() {
         private boolean finish = false;
@@ -44,9 +39,9 @@ public class CrawlerThread implements Runnable {
                 if (response.contains("msgrepeaterlist")) {
                     //获取弹幕服务器地址
                     LogUtil.i("获取弹幕服务器地址 ...");
-                    String barrageServerStr = SttCode.deFilterStr(SttCode.deFilterStr(response));
-                    barrageServers = ResponseParser.parseBarrageServer(barrageServerStr);
-                    LogUtil.i("获取到 " + barrageServers.size() + " 个服务器地址 ...");
+                    String danmakuServerStr = SttCode.deFilterStr(SttCode.deFilterStr(response));
+                    danmakuServers = ResponseParser.parseDanmakuServer(danmakuServerStr);
+                    LogUtil.i("获取到 " + danmakuServers.size() + " 个服务器地址 ...");
                     f1 = true;
                 }
 
@@ -70,10 +65,10 @@ public class CrawlerThread implements Runnable {
     };
 
     //请求弹幕服务器回调
-    private MessageHandler.OnReceiveListener barrageListener = new MessageHandler.OnReceiveListener() {
+    private MessageHandler.OnReceiveListener danmakuListener = new MessageHandler.OnReceiveListener() {
 
         private boolean finished = false;
-        private List<Barrage> barrages = new ArrayList<>();
+        private List<Danmaku> danmakus = new ArrayList<>();
         private TimeHelper helper = new TimeHelper(20 * 60 * 1000);//间隔20min检测一次直播状态
 
         @Override
@@ -85,15 +80,15 @@ public class CrawlerThread implements Runnable {
                 if (!response.contains("chatmessage")) continue;
 
                 //解析弹幕
-                Barrage barrage = ResponseParser.parseBarrage(response);
-                if (barrage == null) continue;
+                Danmaku danmaku = ResponseParser.parseDanmaku(response);
+                if (danmaku == null) continue;
 
-                barrages.add(barrage);
-                LogUtil.i("Barrage", barrage.getSnick() + ":" + barrage.getContent());
+                danmakus.add(danmaku);
+                LogUtil.i("Danmaku", danmaku.getSnick() + ":" + danmaku.getContent());
 
-                if (barrages.size() >= 20 && BarrageDao.saveBarrage(barrages)) {
+                if (danmakus.size() >= 20 && DanmakuDao.saveDanmaku(danmakus)) {
                     LogUtil.i("DB", "保存弹幕到数据库 ...");
-                    barrages.clear();
+                    danmakus.clear();
                 }
             }
 
@@ -159,14 +154,14 @@ public class CrawlerThread implements Runnable {
     private void startCrawler() {
         try {
 
-            if (barrageServers == null || barrageServers.size() <= 0) {
+            if (danmakuServers == null || danmakuServers.size() <= 0) {
                 LogUtil.w("没有可用的弹幕服务器 ...");
                 return;
             }
-            ServerInfo barrageServer = barrageServers.get((int) (Math.random() * barrageServers.size()));
-            Socket socket = new Socket(barrageServer.getHost(), barrageServer.getPort());
-            LogUtil.i("登陆到弹幕服务器 " + barrageServer.getHost() + ":" + barrageServer.getPort());
-            MessageHandler.send(socket, Request.barrageLogin(rid));
+            ServerInfo danmakuServer = danmakuServers.get((int) (Math.random() * danmakuServers.size()));
+            Socket socket = new Socket(danmakuServer.getHost(), danmakuServer.getPort());
+            LogUtil.i("登陆到弹幕服务器 " + danmakuServer.getHost() + ":" + danmakuServer.getPort());
+            MessageHandler.send(socket, Request.danmakuLogin(rid));
             LogUtil.i("进入 " + rid + " 号房间， " + gid + " 号弹幕群组 ...");
             MessageHandler.send(socket, Request.joinGroup(rid, gid));
 
@@ -176,9 +171,9 @@ public class CrawlerThread implements Runnable {
             LogUtil.i("开始接收弹幕 ...");
             LogUtil.i("----------------------------------------------------------------");
 
-            BarrageDao.createTable();
+            DanmakuDao.createTable();
 
-            MessageHandler.receive(socket, barrageListener);
+            MessageHandler.receive(socket, danmakuListener);
 
 
         } catch (IOException e) {

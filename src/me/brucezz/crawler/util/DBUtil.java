@@ -99,9 +99,9 @@ public class DBUtil {
     public static void main(String[] args) {
         // 测试
         List<String> sqls = new ArrayList<>();
-        sqls.add("INSERT INTO Barrage(uid,snick, content, date,rid) VALUES(99999999, 'XXxX', 'XXxX', '2016-1-1', 88888888);");
-        sqls.add("INSERT INTO Barrage(uid,snick, content, date,rid) VALUES(99999999, 'XXxxX', 'XXxxX', '2016-1-1', 88888888);");
-        sqls.add("INSERT INTO Barrage(uid,snick, content, date,rid) VALUES(99999999, 'XXxxxxX', 'XXxxxxX', '2016-1-1', 88888888);");
+        sqls.add("INSERT INTO Danmaku(uid,snick, content, date,rid) VALUES(99999999, 'XXxX', 'XXxX', '2016-1-1', 88888888);");
+        sqls.add("INSERT INTO Danmaku(uid,snick, content, date,rid) VALUES(99999999, 'XXxxX', 'XXxxX', '2016-1-1', 88888888);");
+        sqls.add("INSERT INTO Danmaku(uid,snick, content, date,rid) VALUES(99999999, 'XXxxxxX', 'XXxxxxX', '2016-1-1', 88888888);");
 
         execSQL(sqls);
         System.out.println("done!");

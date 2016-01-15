@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by Brucezz on 2016/01/03.
  * DouyuCrawler
  */
-public class Barrage {
+public class Danmaku {
 
     private int uid;//用户id
     private String snick;//昵称
@@ -14,7 +14,7 @@ public class Barrage {
     private Date date;//发布时间
     private int rid;//房间号
 
-    public Barrage(int uid, String snick, String content, int rid) {
+    public Danmaku(int uid, String snick, String content, int rid) {
         this.uid = uid;
         this.snick = snick;
         this.content = content;
@@ -24,7 +24,7 @@ public class Barrage {
 
     @Override
     public String toString() {
-        return "Barrage{" +
+        return "Danmaku{" +
                 "uid=" + uid +
                 ", snick='" + snick + '\'' +
                 ", content='" + content + '\'' +
