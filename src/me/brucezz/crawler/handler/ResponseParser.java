@@ -20,7 +20,7 @@ public class ResponseParser {
     private static final String REGEX_SERVER = "%7B%22ip%22%3A%22(.*?)%22%2C%22port%22%3A%22(.*?)%22%7D%2C";
     private static final String REGEX_GROUP_ID = "type@=setmsggroup.*/rid@=(\\d*?)/gid@=(\\d*?)/";
     private static final String REGEX_DANMAKU_SERVER = "/ip@=(.*?)/port@=(\\d*?)/";
-    private static final String REGEX_CHAT_DANMAKU = "type@=chatmessage/.*/sender@=(\\d.*?)/content@=(.*?)/snick@=(.*?)/.*/rid@=(\\d*?)/";
+    private static final String REGEX_CHAT_DANMAKU = "type@=chatmsg/.*rid@=(\\d*)/.*uid@=(\\d*).*nn@=(.*?)/txt@=(.*?)/(.*)/";
 
 
     private static Matcher getMatcher(String content, String regex) {
@@ -120,10 +120,10 @@ public class ResponseParser {
         Danmaku danmaku = null;
 
         if (matcher.find()) {
-            danmaku = new Danmaku(Integer.parseInt(matcher.group(1)),
+            danmaku = new Danmaku(Integer.parseInt(matcher.group(2)),
                     matcher.group(3),
-                    matcher.group(2),
-                    Integer.parseInt(matcher.group(4)));
+                    matcher.group(4),
+                    Integer.parseInt(matcher.group(1)));
         }
 
         LogUtil.d("Parse Danmaku", danmaku + "");
