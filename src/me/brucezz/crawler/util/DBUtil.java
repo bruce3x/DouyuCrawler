@@ -21,7 +21,7 @@ public class DBUtil {
 
     private static final String JDBC_MYSQL_DRIVER = "com.mysql.jdbc.Driver";
     private static final String CONNECTION_URL = "jdbc:mysql://localhost/" + DB_NAME
-            + "?useUnicode=true&characterEncoding=utf8";
+            + "?useUnicode=true&characterEncoding=utf8&useSSL=false";
 
     private static Connection instance;
 
