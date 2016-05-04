@@ -77,7 +77,7 @@ public class CrawlerThread implements Runnable {
             for (String response : responses) {
                 LogUtil.d("Receive Response", response);
 
-                if (!response.contains("chatmessage")) continue;
+                if (!response.contains("chatmsg")) continue;
 
                 //解析弹幕
                 Danmaku danmaku = ResponseParser.parseDanmaku(response);
